@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Web.Models;
+namespace Web;
 
 public partial class Person
 {
@@ -12,6 +12,10 @@ public partial class Person
     public string Lastname { get; set; } = null!;
 
     public string Email { get; set; } = null!;
+
+    public string Login { get; set; } = null!;
+
+    public string Password { get; set; } = null!;
 
     public virtual ICollection<Phone> Phones { get; set; } = new List<Phone>();
 }

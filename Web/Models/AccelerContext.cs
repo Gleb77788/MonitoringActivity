@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace Web.Models;
 
@@ -15,6 +17,8 @@ public partial class AccelerContext : DbContext
 
     public virtual DbSet<ActivityType> ActivityTypes { get; set; }
 
+    public virtual DbSet<Company> Companies { get; set; }
+
     public virtual DbSet<Measurement> Measurements { get; set; }
 
     public virtual DbSet<Person> People { get; set; }
@@ -23,11 +27,9 @@ public partial class AccelerContext : DbContext
 
     public virtual DbSet<Session> Sessions { get; set; }
 
-    public virtual DbSet<Company> Companies { get; set; }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=acceler;Username=postgres;Password=1234");
+        => optionsBuilder.UseNpgsql("Host=localhost;Database=acceler;Username=postgres;Password=1234");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -47,11 +49,26 @@ public partial class AccelerContext : DbContext
                 .HasColumnName("name_activity");
         });
 
+        modelBuilder.Entity<Company>(entity =>
+        {
+            entity.HasKey(e => e.IdCompany).HasName("Company_pkey");
+
+            entity.ToTable("Company");
+
+            entity.HasIndex(e => e.IdCompany, "Company_id_key").IsUnique();
+
+            entity.Property(e => e.IdCompany)
+                .UseIdentityAlwaysColumn()
+                .HasColumnName("id_company");
+        });
+
         modelBuilder.Entity<Measurement>(entity =>
         {
             entity
                 .HasNoKey()
                 .ToTable("Measurement");
+
+            entity.HasIndex(e => e.FkMeasurementSession, "IX_Measurement_fk_measurement_session");
 
             entity.Property(e => e.Ax).HasColumnName("ax");
             entity.Property(e => e.Ay).HasColumnName("ay");
@@ -65,19 +82,6 @@ public partial class AccelerContext : DbContext
             entity.HasOne(d => d.FkMeasurementSessionNavigation).WithMany()
                 .HasForeignKey(d => d.FkMeasurementSession)
                 .HasConstraintName("Measurement_fk_measurement_session_fkey");
-        });
-
-        modelBuilder.Entity<Company>(entity =>
-        {
-            entity.HasKey(e => e.IdCompany).HasName("Company_pkey");
-
-            entity.ToTable("Company");
-
-            entity.HasIndex(e => e.IdCompany, "Company_id_key").IsUnique();
-
-            entity.Property(e => e.IdCompany)
-                .UseIdentityAlwaysColumn()
-                .HasColumnName("id_company");
         });
 
         modelBuilder.Entity<Person>(entity =>
@@ -100,6 +104,12 @@ public partial class AccelerContext : DbContext
             entity.Property(e => e.Lastname)
                 .HasMaxLength(50)
                 .HasColumnName("lastname");
+            entity.Property(e => e.Login)
+                .HasMaxLength(50)
+                .HasColumnName("login");
+            entity.Property(e => e.Password)
+                .HasMaxLength(50)
+                .HasColumnName("password");
         });
 
         modelBuilder.Entity<Phone>(entity =>
@@ -107,6 +117,8 @@ public partial class AccelerContext : DbContext
             entity.HasKey(e => e.IdPhone).HasName("Phone_pkey");
 
             entity.ToTable("Phone");
+
+            entity.HasIndex(e => e.FkPhonePerson, "IX_Phone_fk_phone_person");
 
             entity.HasIndex(e => e.IdPhone, "Phone_id_key").IsUnique();
 
@@ -129,6 +141,10 @@ public partial class AccelerContext : DbContext
             entity.HasKey(e => e.IdSession).HasName("Session_pkey");
 
             entity.ToTable("Session");
+
+            entity.HasIndex(e => e.FkSessionActivity, "IX_Session_fk_session_activity");
+
+            entity.HasIndex(e => e.FkSessionPhone, "IX_Session_fk_session_phone");
 
             entity.Property(e => e.IdSession)
                 .UseIdentityAlwaysColumn()

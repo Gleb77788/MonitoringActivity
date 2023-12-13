@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Web.Models;
 
-namespace Web.Models;
+namespace Web;
 
 public partial class Phone
 {
