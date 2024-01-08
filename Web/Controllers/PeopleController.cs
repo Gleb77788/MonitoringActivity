@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
+using Castle.Core.Resource;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -114,6 +117,37 @@ namespace Web.Controllers
 
             return NoContent();
         }
+
+        // GET: api/Data/testLazy
+        // Self write
+        [HttpGet("testLazy")]
+
+        public async Task<ActionResult<IEnumerable<Phone>>> GetDataOfPerson()
+        {
+            Person user = _context.People.Where(r => r.IdPerson == 1).FirstOrDefault();
+            return user.Phones.ToImmutableList();
+        }
+
+        //GET: api/Data/testEager
+        // Self write
+        //[HttpGet("testEager")]
+
+        //public async Task<ActionResult<IEnumerable<Phone>>> GetDataOfPersonEg()
+        //{
+        //    Person user = _context.People.Where(r => r.IdPerson == 1).Include(r => r.Phones).FirstOrDefault();
+        //    return user.Phones.ToImmutableList();
+        //}
+
+        //GET: api/Data/testExplicit
+        // Self write
+        //[HttpGet("testExplicit")]
+
+        //public async Task<ActionResult<IEnumerable<Phone>>> GetDataOfPersonEx()
+        //{
+        //    Person user = _context.People.Where(r => r.IdPerson == 1).FirstOrDefault();
+        //    _context.Entry(user).Collection(r => r.Phones).Load();
+        //    return user.Phones.ToImmutableList();
+        //}
 
         private bool PersonExists(long id)
         {
