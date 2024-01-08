@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Web.Models;
 
-public partial class ActivityType
+public partial class TypeOfActivities
 {
     public long IdActivityTypes { get; set; }
 
