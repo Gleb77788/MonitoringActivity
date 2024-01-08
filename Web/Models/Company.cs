@@ -7,5 +7,5 @@ public partial class Company
 {
     public long IdCompany { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string NameCompany { get; set; } = null!;
 }
