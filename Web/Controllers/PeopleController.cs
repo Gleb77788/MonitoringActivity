@@ -128,26 +128,7 @@ namespace Web.Controllers
             return user.Phones.ToImmutableList();
         }
 
-        //GET: api/Data/testEager
-        // Self write
-        //[HttpGet("testEager")]
 
-        //public async Task<ActionResult<IEnumerable<Phone>>> GetDataOfPersonEg()
-        //{
-        //    Person user = _context.People.Where(r => r.IdPerson == 1).Include(r => r.Phones).FirstOrDefault();
-        //    return user.Phones.ToImmutableList();
-        //}
-
-        //GET: api/Data/testExplicit
-        // Self write
-        //[HttpGet("testExplicit")]
-
-        //public async Task<ActionResult<IEnumerable<Phone>>> GetDataOfPersonEx()
-        //{
-        //    Person user = _context.People.Where(r => r.IdPerson == 1).FirstOrDefault();
-        //    _context.Entry(user).Collection(r => r.Phones).Load();
-        //    return user.Phones.ToImmutableList();
-        //}
 
         private bool PersonExists(long id)
         {
