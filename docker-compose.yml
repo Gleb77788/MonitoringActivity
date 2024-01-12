@@ -1,7 +1,7 @@
 version: "3.9"
 services:
     postgres:
-        container_name: postgres_container
+        container_name: postgres_container_gl
         image: postgres:13.3
         environment:
             POSTGRES_DB: "acceler"
@@ -20,7 +20,7 @@ services:
             - postgres
             
     pgadmin:
-        container_name: pgadmin_container
+        container_name: pgadmin_container_gl
         image: dpage/pgadmin4:7.2
         environment:
           PGADMIN_DEFAULT_EMAIL: "habrpguser@habr.com"
@@ -40,7 +40,7 @@ services:
           - postgres
           
     backend:
-        container_name: backend_container
+        container_name: backend_container_gl
         build:
             context: .
             dockerfile: Dockerfile
